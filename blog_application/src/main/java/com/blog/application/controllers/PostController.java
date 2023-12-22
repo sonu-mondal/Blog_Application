@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.application.DTO.PostDTO;
 import com.blog.application.payload.ApiResponse;
+import com.blog.application.payload.PostResponse;
 import com.blog.application.service.PostServiceImpl;
 
 import jakarta.validation.Valid;
@@ -45,11 +47,14 @@ public class PostController {
 		this.postServiceImpl.deletePost(postId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Post deleted successfully",true), HttpStatus.OK);
 	}
-	
+	//url: http://localhost:9989/api/posts?pageNumber=0&pageSize=5
+	//here pageNumber will start from 0 and we can modify that and pageSize as well
+	//if we take pageSize 2 then 2 number of contents/data will be shown/fetched
 	@GetMapping("/posts")
-	public ResponseEntity<List<PostDTO>> getAllPost(){
-		List<PostDTO> posts=this.postServiceImpl.getAllPost();
-		return new ResponseEntity<List<PostDTO>>(posts, HttpStatus.OK);
+	public ResponseEntity<PostResponse> getAllPost(@RequestParam(value ="pageNumber", defaultValue ="0",required =false ) Integer pageNumber,
+			@RequestParam(value ="pageSize", defaultValue ="5",required =false ) Integer pageSize){
+		PostResponse allPost = this.postServiceImpl.getAllPost(pageNumber, pageSize);//ctrl+1 to variable get data type
+		return new ResponseEntity<PostResponse>(allPost, HttpStatus.OK);
 	}
 	
 	@GetMapping("/posts/{postId}")
