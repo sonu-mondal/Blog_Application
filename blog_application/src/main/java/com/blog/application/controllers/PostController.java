@@ -20,6 +20,7 @@ import com.blog.application.DTO.PostDTO;
 import com.blog.application.payload.ApiResponse;
 import com.blog.application.payload.PostResponse;
 import com.blog.application.service.PostServiceImpl;
+import com.blog.application.utils.AppConstants;
 
 import jakarta.validation.Valid;
 
@@ -53,10 +54,10 @@ public class PostController {
 	//here pageNumber will start from 0 and we can modify that and pageSize as well
 	//if we take pageSize 2 then 2 number of contents/data will be shown/fetched
 	@GetMapping("/posts")
-	public ResponseEntity<PostResponse> getAllPost(@RequestParam(value ="pageNumber", defaultValue ="0",required =false ) Integer pageNumber,
-			@RequestParam(value ="pageSize", defaultValue ="5",required =false ) Integer pageSize,
-			@RequestParam(value="sortBy", defaultValue ="postId", required = false) String sortBy,
-			@RequestParam(value="sortOrder", defaultValue ="asc", required = false) String sortOrder){
+	public ResponseEntity<PostResponse> getAllPost(@RequestParam(value ="pageNumber", defaultValue =AppConstants.PAGE_NUMBER,required =false ) Integer pageNumber,
+			@RequestParam(value ="pageSize", defaultValue =AppConstants.PAGE_SIZE,required =false ) Integer pageSize,
+			@RequestParam(value="sortBy", defaultValue =AppConstants.SORT_BY, required = false) String sortBy,
+			@RequestParam(value="sortOrder", defaultValue =AppConstants.SORT_ORDER, required = false) String sortOrder){
 		PostResponse allPost = this.postServiceImpl.getAllPost(pageNumber, pageSize, sortBy, sortOrder);//ctrl+1 to variable get data type
 		return new ResponseEntity<PostResponse>(allPost, HttpStatus.OK);
 	}

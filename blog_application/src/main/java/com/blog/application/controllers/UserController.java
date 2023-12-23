@@ -19,6 +19,7 @@ import com.blog.application.DTO.UserDTO;
 import com.blog.application.payload.ApiResponse;
 import com.blog.application.payload.UserResponse;
 import com.blog.application.service.UserServiceImpl;
+import com.blog.application.utils.AppConstants;
 
 import jakarta.validation.Valid;
 
@@ -55,10 +56,10 @@ public class UserController {
 	//url; http://localhost:9989/api/users?pageNumber=0&pageSize=10
 	//http://localhost:9989/api/users?pageNumber=0&pageSize=10&sortBy=Id&sortOrder=desc
 	@GetMapping("/users")
-	public ResponseEntity<UserResponse> getAllUsers(@RequestParam(value="pageNumber", defaultValue ="0", required = false) Integer pageNumber,
-			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize,
+	public ResponseEntity<UserResponse> getAllUsers(@RequestParam(value="pageNumber", defaultValue =AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+			@RequestParam(value="pageSize", defaultValue =AppConstants.PAGE_SIZE, required = false) Integer pageSize,
 			@RequestParam(value="sortBy", defaultValue ="id", required = false) String sortBy,
-			@RequestParam(value="sortOrder", defaultValue ="asc", required = false) String sortOrder){
+			@RequestParam(value="sortOrder", defaultValue =AppConstants.SORT_ORDER, required = false) String sortOrder){
 		UserResponse response=this.userServiceImpl.getAllUsers(pageNumber, pageSize, sortBy, sortOrder);
 		return new ResponseEntity<UserResponse>(response, HttpStatus.OK);
 	}

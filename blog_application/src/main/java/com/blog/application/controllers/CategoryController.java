@@ -18,6 +18,7 @@ import com.blog.application.DTO.CategoryDTO;
 import com.blog.application.payload.ApiResponse;
 import com.blog.application.payload.CategoryResponse;
 import com.blog.application.service.CategoryServiceImpl;
+import com.blog.application.utils.AppConstants;
 
 import jakarta.validation.Valid;
 
@@ -56,10 +57,10 @@ public class CategoryController {
 	//url: http://localhost:9989/api/categories?pageNumber=1&pageSize=5
 	//http://localhost:9989/api/categories?pageNumber=0&pageSize=10&sortBy=categoryId&sortOrder=asc
 	@GetMapping("/categories")
-	public ResponseEntity<CategoryResponse> getAllCategory(@RequestParam(value="pageNumber", defaultValue ="0", required = false) Integer pageNumber,
-			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize,
+	public ResponseEntity<CategoryResponse> getAllCategory(@RequestParam(value="pageNumber", defaultValue =AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+			@RequestParam(value="pageSize", defaultValue =AppConstants.PAGE_SIZE, required = false) Integer pageSize,
 			@RequestParam(value="sortBy", defaultValue ="categoryId", required = false) String sortBy,
-			@RequestParam(value="sortOrder", defaultValue ="asc", required = false) String sortOrder){
+			@RequestParam(value="sortOrder", defaultValue =AppConstants.SORT_ORDER, required = false) String sortOrder){
 		CategoryResponse response=this.categoryServiceImpl.getAllCategories(pageNumber, pageSize, sortBy, sortOrder);
 		return new ResponseEntity<CategoryResponse>(response, HttpStatus.OK);
 	}
