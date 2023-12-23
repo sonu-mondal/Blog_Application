@@ -3,7 +3,6 @@ package com.blog.application.service;
 import java.util.List;
 
 import com.blog.application.DTO.PostDTO;
-import com.blog.application.entities.Post;
 import com.blog.application.payload.PostResponse;
 
 public interface PostService {
@@ -22,6 +21,6 @@ public interface PostService {
 	
 	public List<PostDTO> getPostByUser(Integer userId);
 	
-	public List<Post> searchPosts(String keyword);
+	public List<PostDTO> searchPosts(String keyword);
 	
 }

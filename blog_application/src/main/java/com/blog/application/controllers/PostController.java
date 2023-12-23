@@ -47,6 +47,7 @@ public class PostController {
 		this.postServiceImpl.deletePost(postId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Post deleted successfully",true), HttpStatus.OK);
 	}
+	
 	//url: http://localhost:9989/api/posts?pageNumber=0&pageSize=5
 	//http://localhost:9989/api/posts?pageNumber=0&pageSize=10&sortBy=content&sortOrder=desc
 	//here pageNumber will start from 0 and we can modify that and pageSize as well
@@ -78,6 +79,15 @@ public class PostController {
 	public ResponseEntity<List<PostDTO>> getPostByCategory(@PathVariable Integer categoryId){
 		List<PostDTO> posts=this.postServiceImpl.getPostByCategory(categoryId);
 		return new ResponseEntity<List<PostDTO>>(posts, HttpStatus.OK);
+	}
+	
+	//Search post
+	//url: http://localhost:9989/api/posts/search/What
+	//url: http://localhost:9989/api/posts/search/programming lang
+	@GetMapping("/posts/search/{keyword}")
+	public ResponseEntity<List<PostDTO>> searchPostByTitle(@PathVariable String keyword){
+		List<PostDTO> searchPosts = this.postServiceImpl.searchPosts(keyword);
+		return new ResponseEntity<List<PostDTO>>(searchPosts, HttpStatus.OK);
 	}
 	
 	

@@ -52,6 +52,7 @@ public class CategoryController {
 		CategoryDTO categoryDTO=this.categoryServiceImpl.getCategory(categoryId);
 		return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
 	}
+	
 	//url: http://localhost:9989/api/categories?pageNumber=1&pageSize=5
 	//http://localhost:9989/api/categories?pageNumber=0&pageSize=10&sortBy=categoryId&sortOrder=asc
 	@GetMapping("/categories")
