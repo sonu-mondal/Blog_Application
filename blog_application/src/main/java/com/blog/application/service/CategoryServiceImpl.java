@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.blog.application.DTO.CategoryDTO;
@@ -56,8 +57,19 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
 	@Override
-	public CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize) {
-		Pageable p=PageRequest.of(pageNumber, pageSize);
+	public CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+		
+//		Sort sort=sortOrder.equalsIgnoreCase("asc")?Sort.by(sortOrder).ascending():Sort.by(sortOrder).descending();		
+		//or
+		Sort sort=null;
+		if(sortOrder.equalsIgnoreCase("asc")) {
+			sort=Sort.by(sortBy).ascending();
+		}
+		else {
+			sort=Sort.by(sortBy).descending();
+		}
+		
+		Pageable p=PageRequest.of(pageNumber, pageSize, sort);
 		Page<Category> pageCategory=this.categoryRepository.findAll(p);
 		
 		List<Category> categories=pageCategory.getContent();

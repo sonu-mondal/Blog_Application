@@ -53,10 +53,13 @@ public class UserController {
 	
 	//Get all user
 	//url; http://localhost:9989/api/users?pageNumber=0&pageSize=10
+	//http://localhost:9989/api/users?pageNumber=0&pageSize=10&sortBy=Id&sortOrder=desc
 	@GetMapping("/users")
 	public ResponseEntity<UserResponse> getAllUsers(@RequestParam(value="pageNumber", defaultValue ="0", required = false) Integer pageNumber,
-			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize){
-		UserResponse response=this.userServiceImpl.getAllUsers(pageNumber, pageSize);
+			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize,
+			@RequestParam(value="sortBy", defaultValue ="id", required = false) String sortBy,
+			@RequestParam(value="sortOrder", defaultValue ="asc", required = false) String sortOrder){
+		UserResponse response=this.userServiceImpl.getAllUsers(pageNumber, pageSize, sortBy, sortOrder);
 		return new ResponseEntity<UserResponse>(response, HttpStatus.OK);
 	}
 	

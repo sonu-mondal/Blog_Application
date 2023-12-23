@@ -48,12 +48,15 @@ public class PostController {
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Post deleted successfully",true), HttpStatus.OK);
 	}
 	//url: http://localhost:9989/api/posts?pageNumber=0&pageSize=5
+	//http://localhost:9989/api/posts?pageNumber=0&pageSize=10&sortBy=content&sortOrder=desc
 	//here pageNumber will start from 0 and we can modify that and pageSize as well
 	//if we take pageSize 2 then 2 number of contents/data will be shown/fetched
 	@GetMapping("/posts")
 	public ResponseEntity<PostResponse> getAllPost(@RequestParam(value ="pageNumber", defaultValue ="0",required =false ) Integer pageNumber,
-			@RequestParam(value ="pageSize", defaultValue ="5",required =false ) Integer pageSize){
-		PostResponse allPost = this.postServiceImpl.getAllPost(pageNumber, pageSize);//ctrl+1 to variable get data type
+			@RequestParam(value ="pageSize", defaultValue ="5",required =false ) Integer pageSize,
+			@RequestParam(value="sortBy", defaultValue ="postId", required = false) String sortBy,
+			@RequestParam(value="sortOrder", defaultValue ="asc", required = false) String sortOrder){
+		PostResponse allPost = this.postServiceImpl.getAllPost(pageNumber, pageSize, sortBy, sortOrder);//ctrl+1 to variable get data type
 		return new ResponseEntity<PostResponse>(allPost, HttpStatus.OK);
 	}
 	

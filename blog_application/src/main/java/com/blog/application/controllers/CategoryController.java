@@ -53,10 +53,13 @@ public class CategoryController {
 		return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
 	}
 	//url: http://localhost:9989/api/categories?pageNumber=1&pageSize=5
+	//http://localhost:9989/api/categories?pageNumber=0&pageSize=10&sortBy=categoryId&sortOrder=asc
 	@GetMapping("/categories")
 	public ResponseEntity<CategoryResponse> getAllCategory(@RequestParam(value="pageNumber", defaultValue ="0", required = false) Integer pageNumber,
-			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize){
-		CategoryResponse response=this.categoryServiceImpl.getAllCategories(pageNumber, pageSize);
+			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize,
+			@RequestParam(value="sortBy", defaultValue ="categoryId", required = false) String sortBy,
+			@RequestParam(value="sortOrder", defaultValue ="asc", required = false) String sortOrder){
+		CategoryResponse response=this.categoryServiceImpl.getAllCategories(pageNumber, pageSize, sortBy, sortOrder);
 		return new ResponseEntity<CategoryResponse>(response, HttpStatus.OK);
 	}
 

@@ -12,7 +12,7 @@ public interface UserService {
 	
 	public UserDTO getUserById(Integer userId);
 	
-	public UserResponse getAllUsers(Integer pageNumber, Integer pageSize);
+	public UserResponse getAllUsers(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 	
 	public void deleteUser(Integer userId);
 
