@@ -1,6 +1,5 @@
 package com.blog.application.controllers;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,16 +12,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.application.DTO.UserDTO;
 import com.blog.application.payload.ApiResponse;
+import com.blog.application.payload.UserResponse;
 import com.blog.application.service.UserServiceImpl;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/")
 @Validated
 public class UserController {
 	
@@ -51,9 +52,12 @@ public class UserController {
 	}
 	
 	//Get all user
-	@GetMapping("/")
-	public ResponseEntity<List<UserDTO>> getAllUsers(){
-		return new ResponseEntity<List<UserDTO>>(this.userServiceImpl.getAllUsers(), HttpStatus.OK);
+	//url; http://localhost:9989/api/users?pageNumber=0&pageSize=10
+	@GetMapping("/users")
+	public ResponseEntity<UserResponse> getAllUsers(@RequestParam(value="pageNumber", defaultValue ="0", required = false) Integer pageNumber,
+			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize){
+		UserResponse response=this.userServiceImpl.getAllUsers(pageNumber, pageSize);
+		return new ResponseEntity<UserResponse>(response, HttpStatus.OK);
 	}
 	
 	//get single user

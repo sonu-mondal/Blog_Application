@@ -1,6 +1,5 @@
 package com.blog.application.controllers;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,16 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.application.DTO.CategoryDTO;
 import com.blog.application.payload.ApiResponse;
+import com.blog.application.payload.CategoryResponse;
 import com.blog.application.service.CategoryServiceImpl;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/")
 public class CategoryController {
 
 	@Autowired
@@ -51,11 +52,12 @@ public class CategoryController {
 		CategoryDTO categoryDTO=this.categoryServiceImpl.getCategory(categoryId);
 		return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
 	}
-	
-	@GetMapping("/")
-	public ResponseEntity<List<CategoryDTO>> getAllCategory(){
-		List<CategoryDTO> categoryDTO=this.categoryServiceImpl.getAllCategories();
-		return new ResponseEntity<List<CategoryDTO>>(categoryDTO, HttpStatus.OK);
+	//url: http://localhost:9989/api/categories?pageNumber=1&pageSize=5
+	@GetMapping("/categories")
+	public ResponseEntity<CategoryResponse> getAllCategory(@RequestParam(value="pageNumber", defaultValue ="0", required = false) Integer pageNumber,
+			@RequestParam(value="pageSize", defaultValue ="5", required = false) Integer pageSize){
+		CategoryResponse response=this.categoryServiceImpl.getAllCategories(pageNumber, pageSize);
+		return new ResponseEntity<CategoryResponse>(response, HttpStatus.OK);
 	}
 
 	
