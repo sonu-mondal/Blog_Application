@@ -1,0 +1,2 @@
+//to see actuator details
+http://localhost:9989/actuator
