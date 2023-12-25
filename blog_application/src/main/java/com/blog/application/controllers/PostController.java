@@ -1,10 +1,15 @@
 package com.blog.application.controllers;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.StreamUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +20,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog.application.DTO.PostDTO;
 import com.blog.application.payload.ApiResponse;
 import com.blog.application.payload.PostResponse;
+import com.blog.application.service.FileServiceImpl;
 import com.blog.application.service.PostServiceImpl;
 import com.blog.application.utils.AppConstants;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -30,6 +38,12 @@ public class PostController {
 	
 	@Autowired
 	private PostServiceImpl postServiceImpl;
+	
+	@Autowired
+	private FileServiceImpl fileServiceImpl;
+	
+	@Value("${project.image}")
+	private String path;
 	
 	@PostMapping("/user/{userId}/category/{categoryId}/posts")
 	public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postDTO, @PathVariable Integer userId, @PathVariable Integer categoryId){
@@ -89,6 +103,28 @@ public class PostController {
 	public ResponseEntity<List<PostDTO>> searchPostByTitle(@PathVariable String keyword){
 		List<PostDTO> searchPosts = this.postServiceImpl.searchPosts(keyword);
 		return new ResponseEntity<List<PostDTO>>(searchPosts, HttpStatus.OK);
+	}
+	
+	
+	//Post image upload
+	@PostMapping("/post/image/upload/{postId}")
+	public ResponseEntity<PostDTO> uploadPostImage(@RequestParam("image") MultipartFile image,
+			@PathVariable Integer postId) throws IOException{
+		
+		String fileName = this.fileServiceImpl.uploadImage(path, image);
+		PostDTO postDto = this.postServiceImpl.getPostById(postId);
+		postDto.setImageName(fileName);
+		PostDTO updatePost = this.postServiceImpl.updatePost(postDto, postId);
+		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);
+	}
+	
+	//to download image/post
+	//http://localhost:9989/api/post/image/75caa246-f3f2-4f81-a428-baf97cc6f3b2.jpg  - copy image name from database and paste at last of this url to get another image
+	@GetMapping(value="/post/image/{imageName}", produces=MediaType.IMAGE_JPEG_VALUE)
+		public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
+		InputStream resource=this.fileServiceImpl.getResource(path, imageName);
+		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+		org.springframework.util.StreamUtils.copy(resource, response.getOutputStream());
 	}
 	
 	
