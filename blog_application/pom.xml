@@ -16,7 +16,7 @@
 	<artifactId>application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>blog_application</name>
-	<description>Spring Boot backend project for blag application</description>
+	<description>Spring Boot backend project for blog application</description>
 	<properties>
 		<java.version>17</java.version>
 
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
-			<version>0.12.3</version>
+			<version>0.9.1</version>
 		</dependency>
 
 

@@ -4,6 +4,7 @@ package com.blog.application.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,12 +45,13 @@ public class UserController {
 		UserDTO updatUserDTO= this.userServiceImpl.updateUser(userDTO, userId);
 		return ResponseEntity.ok(updatUserDTO);
 	}
-	
+	//ADMIN
 	//delete single user
+	@PreAuthorize("hasRole('ADMIN')")//enabling admin only to have delete request access
 	@DeleteMapping("/{userId}")
-	public ResponseEntity<?> deleteUser(@PathVariable("userId") Integer userId){
+	public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer userId){
 		this.userServiceImpl.deleteUser(userId);
-		return new ResponseEntity<ApiResponse>(new ApiResponse("User deleted successfully!!",true), HttpStatus.OK);
+		return new ResponseEntity<>(new ApiResponse("User deleted successfully!!",true), HttpStatus.OK);
 	}
 	
 	//Get all user
