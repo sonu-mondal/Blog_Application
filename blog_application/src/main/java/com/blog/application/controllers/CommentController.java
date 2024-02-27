@@ -14,20 +14,32 @@ import com.blog.application.DTO.CommentDTO;
 import com.blog.application.payload.ApiResponse;
 import com.blog.application.service.CommentServiceImpl;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/")
+@Tag(name="CommentController")
 public class CommentController {
 	
 	@Autowired
 	private CommentServiceImpl commentServiceImpl;
 	
 	//url: http://localhost:9989/api/post/6/comments
+	@Operation(
+			summary = "Post operation for Comment Controller",
+			description = "It is used to add comment in the database"
+			)
 	@PostMapping("/post/{postId}/comments")
 	public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDto, @PathVariable Integer postId){
 		CommentDTO commentDTO2 = this.commentServiceImpl.createComment(commentDto, postId);
 		return new ResponseEntity<CommentDTO>(commentDTO2, HttpStatus.CREATED);
 	}
 
+	@Operation(
+			summary = "Delete operation for Comment Controller",
+			description = "It is used to delete comments based on the commentId"
+			)
 	@DeleteMapping("/comments/{commentId}")
 	public ResponseEntity<ApiResponse> deleteComment(@PathVariable Integer commentId){
 		this.commentServiceImpl.deleteComment(commentId);

@@ -29,11 +29,14 @@ import com.blog.application.service.FileServiceImpl;
 import com.blog.application.service.PostServiceImpl;
 import com.blog.application.utils.AppConstants;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/")
+@Tag(name="PostController")
 public class PostController {
 	
 	@Autowired
@@ -45,18 +48,30 @@ public class PostController {
 	@Value("${project.image}")
 	private String path;
 	
+	@Operation(
+			summary = "Post operation for Post Controller",
+			description = "It is used to add Post details in the database"
+			)
 	@PostMapping("/user/{userId}/category/{categoryId}/posts")
 	public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postDTO, @PathVariable Integer userId, @PathVariable Integer categoryId){
 		PostDTO createPost=this.postServiceImpl.createPost(postDTO, userId, categoryId);
 		return new ResponseEntity<PostDTO>(createPost, HttpStatus.CREATED);
 	}
 	
+	@Operation(
+			summary = "Put operation for Post Controller",
+			description = "Updating the post details based on postId"
+			)
 	@PutMapping("posts/{postId}")
 	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Integer postId){
 		PostDTO postDTO2=postServiceImpl.updatePost(postDTO, postId);
 		return new ResponseEntity<PostDTO>(postDTO2,HttpStatus.OK);
 	}
 	
+	@Operation(
+			summary = "Delete operation for Post Controller",
+			description = "Deleting the post details based on the postId"
+			)
 	@DeleteMapping("/{postId}")
 	public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId){
 		this.postServiceImpl.deletePost(postId);
@@ -67,6 +82,10 @@ public class PostController {
 	//http://localhost:9989/api/posts?pageNumber=0&pageSize=10&sortBy=content&sortOrder=desc
 	//here pageNumber will start from 0 and we can modify that and pageSize as well
 	//if we take pageSize 2 then 2 number of contents/data will be shown/fetched
+	@Operation(
+			summary = "Get all operation for Post Controller",
+			description = "Fetching all the post details"
+			)
 	@GetMapping("/posts")
 	public ResponseEntity<PostResponse> getAllPost(@RequestParam(value ="pageNumber", defaultValue =AppConstants.PAGE_NUMBER,required =false ) Integer pageNumber,
 			@RequestParam(value ="pageSize", defaultValue =AppConstants.PAGE_SIZE,required =false ) Integer pageSize,
@@ -76,6 +95,10 @@ public class PostController {
 		return new ResponseEntity<PostResponse>(allPost, HttpStatus.OK);
 	}
 	
+	@Operation(
+			summary = "Get operation for Post Controller",
+			description = "Fetching the post details based on postId"
+			)
 	@GetMapping("/posts/{postId}")
 	public ResponseEntity<PostDTO> getPostById(@PathVariable Integer postId){
 		PostDTO posts=this.postServiceImpl.getPostById(postId);
@@ -83,6 +106,11 @@ public class PostController {
 	}
 
 	//get post by user
+
+	@Operation(
+			summary = "Get operation for post for particular user",
+			description = "Fetching the post details for particular user based on userId"
+			)
 	@GetMapping("/user/{userId}/posts")
 	public ResponseEntity<List<PostDTO>> getPostByUser(@PathVariable Integer userId){
 		List<PostDTO> posts=this.postServiceImpl.getPostByUser(userId);
@@ -90,6 +118,11 @@ public class PostController {
 	}
 	
 	//get post by category
+
+	@Operation(
+			summary = "Get operation for post for particular category",
+			description = "Fetching the post details for particular category based on categoryId"
+			)
 	@GetMapping("/category/{categoryId}/posts")
 	public ResponseEntity<List<PostDTO>> getPostByCategory(@PathVariable Integer categoryId){
 		List<PostDTO> posts=this.postServiceImpl.getPostByCategory(categoryId);
@@ -99,6 +132,11 @@ public class PostController {
 	//Search post
 	//url: http://localhost:9989/api/posts/search/What
 	//url: http://localhost:9989/api/posts/search/programming lang
+
+	@Operation(
+			summary = "Get operation for post using keywords",
+			description = "Fetching the post details based on some specific keywords entered by the users"
+			)
 	@GetMapping("/posts/search/{keyword}")
 	public ResponseEntity<List<PostDTO>> searchPostByTitle(@PathVariable String keyword){
 		List<PostDTO> searchPosts = this.postServiceImpl.searchPosts(keyword);
@@ -107,6 +145,10 @@ public class PostController {
 	
 	
 	//Post image upload
+	@Operation(
+			summary = "Post operation for Post Controller",
+			description = "It is used to add image based on postId in the database"
+			)
 	@PostMapping("/post/image/upload/{postId}")
 	public ResponseEntity<PostDTO> uploadPostImage(@RequestParam("image") MultipartFile image,
 			@PathVariable Integer postId) throws IOException{
@@ -120,6 +162,10 @@ public class PostController {
 	
 	//to download image/post
 	//http://localhost:9989/api/post/image/75caa246-f3f2-4f81-a428-baf97cc6f3b2.jpg  - copy image name from database and paste at last of this url to get another image
+	@Operation(
+			summary = "Get operation for post using image name",
+			description = "Fetching the post details based on image name"
+			)
 	@GetMapping(value="/post/image/{imageName}", produces=MediaType.IMAGE_JPEG_VALUE)
 		public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
 		InputStream resource=this.fileServiceImpl.getResource(path, imageName);

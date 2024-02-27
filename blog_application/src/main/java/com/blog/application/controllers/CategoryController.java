@@ -20,34 +20,54 @@ import com.blog.application.payload.CategoryResponse;
 import com.blog.application.service.CategoryServiceImpl;
 import com.blog.application.utils.AppConstants;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/")
+@Tag(name="CategoryController")
 public class CategoryController {
 
 	@Autowired
 	private CategoryServiceImpl categoryServiceImpl;
 	
 	
+	@Operation(
+			summary = "Post operation for Category Controller",
+			description = "It is used to add Category details in the database"
+			)
 	@PostMapping("/")
 	public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
 		CategoryDTO categoryDTO2=this.categoryServiceImpl.createCategory(categoryDTO);
 		return new ResponseEntity<CategoryDTO>(categoryDTO2,HttpStatus.CREATED);
 	}
-	
+
+	@Operation(
+			summary = "Put operation for Category Controller",
+			description = "Updating the category details based on categoryId"
+			)
 	@PutMapping("/category/{categoryId}")
 	public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Integer categoryId){
 		CategoryDTO categoryDTO2=this.categoryServiceImpl.updateCategory(categoryDTO, categoryId);
 		return new ResponseEntity<CategoryDTO>(categoryDTO2,HttpStatus.OK);
 	}
-	
+
+	@Operation(
+			summary = "Delete operation for Category Controller",
+			description = "Deleting the category details based on the categoryId"
+			)
 	@DeleteMapping("/{categoryId}")
 	public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Integer categoryId){
 		this.categoryServiceImpl.deleteCategory(categoryId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Category deleted successfully!!", true),HttpStatus.OK);
 	}
 	
+
+	@Operation(
+			summary = "Get operation for Category Controller",
+			description = "Fetching the category details based on categoryId"
+			)
 	@GetMapping("/{categoryId}")
 	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Integer categoryId){
 		CategoryDTO categoryDTO=this.categoryServiceImpl.getCategory(categoryId);
@@ -56,6 +76,11 @@ public class CategoryController {
 	
 	//url: http://localhost:9989/api/categories?pageNumber=1&pageSize=5
 	//http://localhost:9989/api/categories?pageNumber=0&pageSize=10&sortBy=categoryId&sortOrder=asc
+
+	@Operation(
+			summary = "Get all operation for Category Controller",
+			description = "Fetching all the category details"
+			)
 	@GetMapping("/categories")
 	public ResponseEntity<CategoryResponse> getAllCategory(@RequestParam(value="pageNumber", defaultValue =AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value="pageSize", defaultValue =AppConstants.PAGE_SIZE, required = false) Integer pageSize,

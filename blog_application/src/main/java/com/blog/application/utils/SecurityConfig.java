@@ -9,6 +9,7 @@
 //import org.springframework.security.web.SecurityFilterChain;
 //import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 //
+//import com.blog.application.Security.CustomUserDetailService;
 //import com.blog.application.Security.JWTAuthenticationEntryPoint;
 //import com.blog.application.Security.JwtAuthenticatorFilter;
 //
@@ -21,8 +22,8 @@
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 //public class SecurityConfig {
 ////	
-////	@Autowired
-////	private CustomUs
+//	@Autowired
+//	private CustomUserDetailService customUserDetailService;
 //	
 //	@Autowired
 //	private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -36,6 +37,7 @@
 //		http.
 //		csrf().disable()
 //		.authorizeHttpRequests()
+//		
 //		.anyRequest()
 //		.authenticated()
 //		.and()

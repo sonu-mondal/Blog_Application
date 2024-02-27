@@ -22,17 +22,24 @@ import com.blog.application.payload.UserResponse;
 import com.blog.application.service.UserServiceImpl;
 import com.blog.application.utils.AppConstants;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/")
 @Validated
+@Tag(name="UserController")
 public class UserController {
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	
 	//add new user
+	@Operation(
+			summary = "Post operation for User Controller",
+			description = "It is used to add User details in the database"
+			)
 	@PostMapping("/create")
 	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO){
 		UserDTO userDtos=userServiceImpl.createUser(userDTO);
@@ -40,6 +47,10 @@ public class UserController {
 	}
 	
 	//update user details
+	@Operation(
+			summary = "Put operation for User Controller",
+			description = "Updating the User details based on userId"
+			)
 	@PutMapping("/{userId}")
 	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO, @PathVariable Integer userId){
 		UserDTO updatUserDTO= this.userServiceImpl.updateUser(userDTO, userId);
@@ -48,6 +59,10 @@ public class UserController {
 	//ADMIN
 	//delete single user
 	///@PreAuthorize("hasRole('ADMIN')")//enabling admin only to have delete request access
+	@Operation(
+			summary = "Delete operation for User Contoller",
+			description = "Deleting the user details based on the userId"
+			)
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer userId){
 		this.userServiceImpl.deleteUser(userId);
@@ -57,6 +72,10 @@ public class UserController {
 	//Get all user
 	//url; http://localhost:9989/api/users?pageNumber=0&pageSize=10
 	//http://localhost:9989/api/users?pageNumber=0&pageSize=10&sortBy=Id&sortOrder=desc
+	@Operation(
+			summary = "Get All operation for User Controller",
+			description = "Fetching all the user details"
+			)
 	@GetMapping("/users")
 	public ResponseEntity<UserResponse> getAllUsers(@RequestParam(value="pageNumber", defaultValue =AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value="pageSize", defaultValue =AppConstants.PAGE_SIZE, required = false) Integer pageSize,
@@ -67,6 +86,10 @@ public class UserController {
 	}
 	
 	//get single user
+	@Operation(
+			summary = "Get operation for User Controller",
+			description = "Fetching the user details based on userId"
+			)
 	@GetMapping("/user/{id}")
 	public ResponseEntity<UserDTO> getSingleUsers(@PathVariable Integer id){
 		return new ResponseEntity<UserDTO>(this.userServiceImpl.getUserById(id), HttpStatus.OK);
